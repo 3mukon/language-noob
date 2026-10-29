@@ -33,9 +33,17 @@ public final class StudyStore {
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
     private let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
+    private let searchIsCancelled: () -> Bool
 
-    public init(url: URL) throws {
+    public convenience init(url: URL) throws {
+        try self.init(url: url, searchIsCancelled: { Task<Never, Never>.isCancelled })
+    }
+
+    // The cancellation source is injectable so SQLite interruption can be
+    // verified at an execution checkpoint instead of a scheduler-dependent delay.
+    init(url: URL, searchIsCancelled: @escaping () -> Bool) throws {
         self.url = url
+        self.searchIsCancelled = searchIsCancelled
         try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
         guard sqlite3_open_v2(url.path, &database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, nil) == SQLITE_OK else {
             sqlite3_close(database); database = nil; throw StorageError.database("open")
@@ -138,10 +146,13 @@ public final class StudyStore {
         let limit = min(200, max(1, limit))
         // This connection belongs to its caller's serial executor. Cancellation
         // interrupts SQLite itself, including first-use index construction.
-        sqlite3_progress_handler(database, 1_000, { _ in Task<Never, Never>.isCancelled ? 1 : 0 }, nil)
+        sqlite3_progress_handler(database, 1_000, { context in
+            let owner = Unmanaged<StudyStore>.fromOpaque(context!).takeUnretainedValue()
+            return owner.searchIsCancelled() ? 1 : 0
+        }, Unmanaged.passUnretained(self).toOpaque())
         defer { sqlite3_progress_handler(database, 0, nil, nil) }
         do {
-            try Task.checkCancellation()
+            try checkSearchCancellation()
             try prepareSearchIndex()
             try execute("BEGIN")
             do {
@@ -154,9 +165,13 @@ public final class StudyStore {
                 throw error
             }
         } catch {
-            if Task<Never, Never>.isCancelled { throw CancellationError() }
+            try checkSearchCancellation()
             throw error
         }
+    }
+
+    private func checkSearchCancellation() throws {
+        if searchIsCancelled() { throw CancellationError() }
     }
 
     private func prepareSearchIndex() throws {
@@ -209,7 +224,7 @@ public final class StudyStore {
                     """, values)
             }
         }
-        try Task.checkCancellation()
+        try checkSearchCancellation()
         guard !ids.isEmpty else { return [] }
         let placeholders = Array(repeating: "?", count: ids.count).joined(separator: ",")
         let words = try readWords("WHERE w.language=? AND w.id IN (\(placeholders))", [lang] + ids.map(Value.text))

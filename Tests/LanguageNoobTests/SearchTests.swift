@@ -1,7 +1,7 @@
 import Foundation
 import SQLite3
 import StudyCore
-import StudyStorage
+@testable import StudyStorage
 
 extension LanguageNoobTests {
     static func searchTests() async throws {
@@ -64,8 +64,10 @@ extension LanguageNoobTests {
         try store.seed([Word(id: "later", language: .english, text: "later addition")])
         let added = try await worker.search("later", language: .english)
         try check(added.map(\.id) == ["later"], "an existing background connection sees committed vocabulary changes")
-        let cancelled = Task { try await worker.search("later", language: .english) }
-        cancelled.cancel()
+        let cancelled = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            return try await worker.search("later", language: .english)
+        }
         do { _ = try await cancelled.value; throw TestFailure("cancelled search returned results") }
         catch is CancellationError { }
         let afterCancellation = try await worker.search("later", language: .english)
@@ -96,14 +98,22 @@ extension LanguageNoobTests {
         let coldURL = directory.appendingPathComponent("cold.sqlite")
         let cold = try StudyStore(url: coldURL)
         try cold.seed((0..<2_000).map { Word(id: "\($0)", language: .english, text: "fixture\($0)", definition: "首次索引") })
-        let coldWorker = cold.makeSearchWorker()
-        let interrupted = Task { try await coldWorker.search("fixture", language: .english) }
-        try await Task.sleep(nanoseconds: 5_000_000)
-        interrupted.cancel()
-        do { _ = try await interrupted.value; throw TestFailure("cancelled index build returned results") }
+        var interruptBuild = true, cancellationChecks = 0
+        let interrupted = try StudyStore(url: coldURL, searchIsCancelled: {
+            cancellationChecks += 1
+            return interruptBuild && cancellationChecks >= 10
+        })
+        do { _ = try interrupted.search("fixture", language: .english); throw TestFailure("cancelled index build returned results") }
         catch is CancellationError { }
-        let rebuilt = try await coldWorker.search("fixture", language: .english)
+        try check(cancellationChecks >= 10, "cancellation occurs during SQLite execution, after the entry check")
+        try check(try searchFixtureCount(coldURL, "SELECT COUNT(*) FROM sqlite_master WHERE name LIKE 'library_%'") == 0,
+                  "cancelled construction removes every partial index table and trigger")
+        try check(try cold.words(language: .english).count == 2_000, "cancellation preserves the authoritative vocabulary")
+        interruptBuild = false
+        let rebuilt = try interrupted.search("fixture", language: .english)
         try check(rebuilt.count == 100, "an interrupted lazy build rolls back and can be retried")
+        let reopened = try await cold.makeSearchWorker().search("fixture", language: .english)
+        try check(reopened == rebuilt, "a background connection can reuse the rebuilt persistent index")
         print("PASS: literal indexed search, atomic refresh, background reads and cancellation")
     }
 
@@ -112,5 +122,14 @@ extension LanguageNoobTests {
         guard sqlite3_open(url.path, &database) == SQLITE_OK else { throw TestFailure("search fixture open") }
         defer { sqlite3_close(database) }
         guard sqlite3_exec(database, sql, nil, nil, nil) == SQLITE_OK else { throw TestFailure("search fixture SQL") }
+    }
+
+    private static func searchFixtureCount(_ url: URL, _ sql: String) throws -> Int {
+        var database: OpaquePointer?, statement: OpaquePointer?
+        guard sqlite3_open(url.path, &database) == SQLITE_OK else { throw TestFailure("search fixture open") }
+        defer { sqlite3_finalize(statement); sqlite3_close(database) }
+        guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK,
+              sqlite3_step(statement) == SQLITE_ROW else { throw TestFailure("search fixture count") }
+        return Int(sqlite3_column_int64(statement, 0))
     }
 }
