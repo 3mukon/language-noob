@@ -1,0 +1,13 @@
+# Enable required code-owner review only when at least two maintainers can approve.
+/AGENTS.md @3mukon
+/CLAUDE.md @3mukon
+/docs/architecture.md @3mukon
+/docs/conventions.md @3mukon
+/LICENSE @3mukon
+/.github/workflows/ @3mukon
+/.github/CODEOWNERS @3mukon
+/.codex/ @3mukon
+/.claude/ @3mukon
+/.gitleaks.toml @3mukon
+/.gitleaksignore @3mukon
+/scripts/ @3mukon

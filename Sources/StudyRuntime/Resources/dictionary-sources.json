@@ -1,0 +1,21 @@
+{
+  "version": "2026-10-28",
+  "sources": [
+    {
+      "name": "ECDICT",
+      "url": "https://github.com/skywind3000/ECDICT",
+      "revision": "ab22ad36302cafc6349a050e2b60894855208055",
+      "file": "ecdict.csv",
+      "sha256": "d1ecbdf9ee2b920afb6f430ca6b6bb9f559588cf0dff86e04bd255f9390843cc",
+      "entries": 12126
+    },
+    {
+      "name": "JLPT Vocabulary",
+      "url": "https://github.com/Bluskyo/JLPT_Vocabulary",
+      "revision": "4358f932937ad0232194a36e9f4f875094910c6b",
+      "file": "data/vocab/results/JLPT_vocab_ALL.json",
+      "sha256": "7cccbbc9559d056526f122dff17c24dc80cfc4c607bdd1b26db0dc5238baabca",
+      "entries": 8505
+    }
+  ]
+}

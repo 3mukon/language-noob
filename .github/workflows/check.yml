@@ -1,0 +1,26 @@
+name: Build and verify
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  foundation:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.11'
+          cache: false
+      - name: Install pinned secret scanner
+        run: go install github.com/zricethezav/gitleaks/v8@v8.30.1
+      - name: Check Apple toolchain
+        run: |
+          swift --version
+          xcrun --sdk macosx --show-sdk-version
+      - name: Check foundation
+        run: sh scripts/check.sh
+      - name: Scan full history
+        run: bash scripts/scan-secrets.sh history . --all

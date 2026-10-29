@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'"><title>Language Noob</title><link rel="stylesheet" href="paper.css"></head><body>
+<div id="layered-note-preview"  lang="zh-CN" aria-label="词卡与往来纸条">
+  <header class="ln-toolbar">
+    <span class="ln-title">本轮学习</span>
+    <div class="ln-languages" role="group" aria-label="学习语言">
+      <button type="button" class="cursor-interaction" data-language="en" aria-pressed="true">英语</button>
+      <button type="button" class="cursor-interaction" data-language="ja" aria-pressed="false">日语</button>
+    </div>
+    <button type="button" class="ln-end cursor-interaction">结束本轮</button>
+  </header>
+  <div class="ln-deck" aria-label="叠放学习卡片">
+    <div class="ln-reading-shade" hidden aria-hidden="true"></div>
+    <section class="ln-complete" hidden aria-labelledby="ln-summary-title">
+      <header class="ln-complete-head"><span class="ln-complete-caption">学习安排</span><span class="ln-complete-language"></span></header>
+      <div class="ln-complete-body">
+        <h2 id="ln-summary-title">暂时没有待学词卡</h2>
+        <p class="ln-summary"></p>
+      </div>
+      <footer class="ln-complete-footer">
+        <button type="button" class="ln-start cursor-interaction">开始新一轮</button>
+        <p class="ln-complete-detail" hidden></p>
+      </footer>
+    </section>
+  </div>
+  <div class="ln-live" aria-live="polite" aria-atomic="true"></div>
+  <section class="ln-library" hidden role="dialog" aria-modal="true" aria-label="词库">
+<header><h2>词库</h2><button type="button" class="ln-library-close">关闭</button></header>
+<p class="ln-library-status" hidden></p>
+<input type="search" class="ln-search" maxlength="300" placeholder="搜索单词、读音或中文释义…" aria-label="搜索词库">
+<div class="ln-library-results"></div></section>
+<template class="ln-card-template">
+    <article class="ln-assembly">
+      <div class="ln-ground-shadow" aria-hidden="true"></div>
+      <div class="ln-elevation" aria-hidden="true"></div>
+      <div class="ln-paper">
+        <div class="ln-paper-head"><span class="ln-language"></span><div class="ln-paper-actions"><span class="ln-card-number"></span><button type="button" class="ln-zoom-button cursor-interaction" data-zoom="word" aria-label="放大单词便笺" aria-expanded="false"><span class="ln-zoom-open">放大</span><span class="ln-zoom-close">还原</span></button></div></div>
+        <h2 class="ln-word"><span class="ln-selectable"></span></h2>
+        <div class="ln-reading"><span class="ln-phonetic"><span class="ln-selectable"></span></span><span class="ln-pos"><span class="ln-selectable"></span></span></div>
+        <p class="ln-definition"><span class="ln-selectable"></span></p>
+        <div class="ln-example"><p class="ln-original"><span class="ln-selectable"></span></p><p class="ln-translation"><span class="ln-selectable"></span></p></div><div class="ln-study-actions"></div>
+      </div>
+      <section class="ln-question-note" aria-label="这张卡片的往来纸条">
+        <button type="button" class="ln-zoom-button cursor-interaction" data-zoom="note" aria-label="放大小纸条" aria-expanded="false"><span class="ln-zoom-open">放大</span><span class="ln-zoom-close">还原</span></button>
+        <div class="ln-note-content">
+        <div class="ln-scroll">
+          <div class="ln-feed" role="log" aria-label="往来留言" aria-live="off"></div>
+        </div>
+        <form class="ln-compose"><span class="ln-compose-size" aria-hidden="true">有疑问？写在这里…</span><textarea rows="1" maxlength="2000" aria-label="给这张卡片留言" aria-keyshortcuts="Enter" aria-description="回车寄出，Shift 加回车换行" placeholder="有疑问？写在这里…"></textarea></form>
+        <div class="ln-live ln-letter-status" role="status" aria-live="polite" aria-atomic="true"></div>
+        </div>
+      </section>
+    </article>
+  </template>
+</div>
+<script src="paper-motion.js"></script><script src="paper-reader.js"></script><script src="paper-surfaces.js"></script><script src="paper-reveal.js"></script><script src="paper-round.js"></script><script src="paper.js"></script></body></html>

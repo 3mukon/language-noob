@@ -1,0 +1,18 @@
+{
+  "description": "Foundation checks for tool calls; review and trust in a new session.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "task_root=$(git rev-parse --show-toplevel) || exit 2; python3 \"$task_root/scripts/agent-policy.py\" || exit 2",
+            "timeout": 10,
+            "statusMessage": "Checking foundation rules"
+          }
+        ]
+      }
+    ]
+  }
+}

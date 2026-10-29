@@ -1,0 +1,114 @@
+{
+  "version": "1.0",
+  "language": "en",
+  "words": [
+    {
+      "id": "sample-01",
+      "language": "en",
+      "text": "serendipity",
+      "pronunciation": "/ˌser.ənˈdɪp.ə.ti/",
+      "chinese_def": "机缘巧合；意外发现美好事物的幸运",
+      "difficulty": 1,
+      "part_of_speech": "名词",
+      "examples": [
+        {
+          "sentence": "Finding this little bookshop was pure serendipity.",
+          "translation": "发现这家小书店，纯属一场美好的偶遇。"
+        }
+      ],
+      "tags": [
+        "sample"
+      ]
+    },
+    {
+      "id": "sample-02",
+      "language": "en",
+      "text": "resilient",
+      "pronunciation": "/rɪˈzɪliənt/",
+      "chinese_def": "有韧性的；能从困境中恢复的",
+      "difficulty": 1,
+      "part_of_speech": "形容词",
+      "examples": [
+        {
+          "sentence": "The garden remained resilient through the dry summer.",
+          "translation": "这座花园在干燥的夏天依然充满生机。"
+        }
+      ],
+      "tags": [
+        "sample"
+      ]
+    },
+    {
+      "id": "sample-03",
+      "language": "en",
+      "text": "solace",
+      "pronunciation": "/ˈsɒlɪs/",
+      "chinese_def": "安慰；困苦中的慰藉",
+      "difficulty": 1,
+      "part_of_speech": "名词",
+      "examples": [
+        {
+          "sentence": "She found solace in music.",
+          "translation": "她在音乐中找到了慰藉。"
+        }
+      ],
+      "tags": [
+        "sample"
+      ]
+    },
+    {
+      "id": "sample-04",
+      "language": "en",
+      "text": "glimpse",
+      "pronunciation": "/ɡlɪmps/",
+      "chinese_def": "一瞥；短暂的体验",
+      "difficulty": 1,
+      "part_of_speech": "名词",
+      "examples": [
+        {
+          "sentence": "I caught a glimpse of the sea between the houses.",
+          "translation": "我从房屋之间瞥见了大海。"
+        }
+      ],
+      "tags": [
+        "sample"
+      ]
+    },
+    {
+      "id": "sample-05",
+      "language": "en",
+      "text": "linger",
+      "pronunciation": "/ˈlɪŋɡə(r)/",
+      "chinese_def": "逗留；迟迟不消散",
+      "difficulty": 1,
+      "part_of_speech": "动词",
+      "examples": [
+        {
+          "sentence": "The scent of tea lingered in the room.",
+          "translation": "茶香在房间里久久未散。"
+        }
+      ],
+      "tags": [
+        "sample"
+      ]
+    },
+    {
+      "id": "sample-06",
+      "language": "en",
+      "text": "tranquil",
+      "pronunciation": "/ˈtræŋkwɪl/",
+      "chinese_def": "宁静的；安宁的",
+      "difficulty": 1,
+      "part_of_speech": "形容词",
+      "examples": [
+        {
+          "sentence": "We enjoyed a tranquil morning by the lake.",
+          "translation": "我们在湖边度过了一个宁静的早晨。"
+        }
+      ],
+      "tags": [
+        "sample"
+      ]
+    }
+  ]
+}

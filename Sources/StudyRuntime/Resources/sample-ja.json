@@ -1,0 +1,114 @@
+{
+  "version": "1.0",
+  "language": "ja",
+  "words": [
+    {
+      "id": "sample-01",
+      "language": "ja",
+      "text": "木漏れ日",
+      "pronunciation": "こもれび",
+      "chinese_def": "穿过树叶缝隙洒落的阳光",
+      "difficulty": 1,
+      "part_of_speech": "名词",
+      "examples": [
+        {
+          "sentence": "木漏れ日の中を、ゆっくり歩く。",
+          "translation": "在树隙间洒下的阳光中，慢慢走着。"
+        }
+      ],
+      "tags": [
+        "sample"
+      ]
+    },
+    {
+      "id": "sample-02",
+      "language": "ja",
+      "text": "懐かしい",
+      "pronunciation": "なつかしい",
+      "chinese_def": "令人怀念的；勾起往日回忆的",
+      "difficulty": 1,
+      "part_of_speech": "い形容词",
+      "examples": [
+        {
+          "sentence": "この曲、懐かしいね。",
+          "translation": "这首歌，真让人怀念啊。"
+        }
+      ],
+      "tags": [
+        "sample"
+      ]
+    },
+    {
+      "id": "sample-03",
+      "language": "ja",
+      "text": "一期一会",
+      "pronunciation": "いちごいちえ",
+      "chinese_def": "珍惜每一次独一无二的相遇",
+      "difficulty": 1,
+      "part_of_speech": "名词",
+      "examples": [
+        {
+          "sentence": "一期一会の出会いを大切にしたい。",
+          "translation": "我想珍惜每一次独一无二的相遇。"
+        }
+      ],
+      "tags": [
+        "sample"
+      ]
+    },
+    {
+      "id": "sample-04",
+      "language": "ja",
+      "text": "穏やか",
+      "pronunciation": "おだやか",
+      "chinese_def": "平静；温和；安稳",
+      "difficulty": 1,
+      "part_of_speech": "な形容词",
+      "examples": [
+        {
+          "sentence": "今日は海が穏やかです。",
+          "translation": "今天的海面很平静。"
+        }
+      ],
+      "tags": [
+        "sample"
+      ]
+    },
+    {
+      "id": "sample-05",
+      "language": "ja",
+      "text": "寄り道",
+      "pronunciation": "よりみち",
+      "chinese_def": "绕路；顺路去别处",
+      "difficulty": 1,
+      "part_of_speech": "名词・する动词",
+      "examples": [
+        {
+          "sentence": "帰りに本屋へ寄り道した。",
+          "translation": "回家时顺路去了书店。"
+        }
+      ],
+      "tags": [
+        "sample"
+      ]
+    },
+    {
+      "id": "sample-06",
+      "language": "ja",
+      "text": "気づく",
+      "pronunciation": "きづく",
+      "chinese_def": "注意到；察觉",
+      "difficulty": 1,
+      "part_of_speech": "动词",
+      "examples": [
+        {
+          "sentence": "窓の外の小さな鳥に気づいた。",
+          "translation": "我注意到了窗外的小鸟。"
+        }
+      ],
+      "tags": [
+        "sample"
+      ]
+    }
+  ]
+}
