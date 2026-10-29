@@ -21,7 +21,7 @@ public enum BundledVocabulary {
         #if SWIFT_PACKAGE
         if let url = Bundle.module.url(forResource: "Resources", withExtension: nil) { return url }
         #else
-        let executable = URL(fileURLWithPath: CommandLine.arguments[0]).resolvingSymlinksInPath()
+        let executable = (Bundle.main.executableURL ?? URL(fileURLWithPath: CommandLine.arguments[0])).resolvingSymlinksInPath()
         let candidates = [Bundle.main.resourceURL?.appendingPathComponent("Vocabulary"),
                           executable.deletingLastPathComponent().appendingPathComponent("../Resources/Vocabulary").standardizedFileURL]
         if let url = candidates.compactMap({ $0 }).first(where: {

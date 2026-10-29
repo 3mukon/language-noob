@@ -32,7 +32,7 @@ preparationState exposes idle, queued, loading, ready and failed states. prepara
 
 StudySettings.save(to:replacing:) compares the caller's previous snapshot with its edits, reloads the latest file under a sidecar lock and merges changed top-level and assistant fields. Unknown fields and unrelated concurrent edits survive. The merged configuration is validated before atomic replacement. GUI and CLI use the same JSON shape, database location and Keychain account rules; live rounds remain process-local.
 
-Both clients install the same versioned English and Japanese resources. An installed marker skips parsing. The conversion tool consumes original local source files and records provenance; sample resources exist only for conservative migration. Native packaging places Vocabulary beside the paper resources; terminal packaging carries the same directory with its libraries. Swift Package Manager uses the runtime's resource bundle.
+Both clients install the same versioned English and Japanese resources. An installed marker skips parsing. The conversion tool consumes original local source files and records provenance; sample resources exist only for conservative migration. Native packaging places Vocabulary beside the paper resources; terminal packaging carries the same directory with its libraries. Resources resolve from the loaded executable, following symlinks, so invoking the terminal command through PATH does not depend on the working directory. Swift Package Manager uses the runtime's resource bundle.
 
 ## Dependencies
 

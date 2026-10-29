@@ -27,6 +27,17 @@ def main():
         assert "命令行" in run("--help")
         assert json.loads(run("stats", "--lang", "en", "--json"))["vocabulary"] == 12126
         assert json.loads(run("stats", "--lang", "ja", "--json"))["vocabulary"] == 8505
+        # A shell passes only the command name when resolving an installed PATH symlink.
+        commands = root / "bin"
+        commands.mkdir()
+        (commands / "language-noob").symlink_to(executable)
+        installed = subprocess.run(
+            ["language-noob", "--data-directory", str(root / "installed-data"), "stats", "--lang", "en", "--json"],
+            cwd=root, env=dict(os.environ, PATH=str(commands) + os.pathsep + os.environ.get("PATH", "")),
+            text=True, capture_output=True, timeout=20,
+        )
+        assert installed.returncode == 0, (installed.stdout, installed.stderr)
+        assert json.loads(installed.stdout)["vocabulary"] == 12126
         english = json.loads(run("search", "music", "--lang", "en", "--json"))
         assert english and all(word["language"] == "en" for word in english)
         assert json.loads(run("info", "ecdict-music", "--lang", "en", "--json"))["text"] == "music"
