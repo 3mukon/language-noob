@@ -2,6 +2,8 @@
 
 Read this index first, then open documents by their summaries. Keep one row per document and place closed documents at the end of their section. Add or remove rows, not columns. Update the index whenever a document is created or its status, title, or summary changes.
 
+Current-state documents and the authoritative module READMEs describe the implemented product. Accepted ADRs retain their decision-time context: ADR-0003 extends ADR-0002's assistant integration, and ADR-0004 extends its client and module composition. Read those extensions together instead of treating the earlier proposal wording as the current feature list.
+
 ## Foundation
 
 | ID | Status | Title | Summary |

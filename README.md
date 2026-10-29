@@ -18,27 +18,76 @@ The local desktop application and command-line client target macOS 14 or later. 
 
 ## Quick start
 
-Run the foundation checks:
+Already installed? Open **LanguageNoob** in Applications, or start a terminal round from any directory:
 
 ```sh
+language-noob study
+```
+
+This uses the saved language and combines new words with due reviews. Running `language-noob` without a command shows help. First-time installation is described below; no one-command installer or prebuilt release is provided yet.
+
+### Build from source
+
+Use macOS 14 or later with Git, Bash, Python 3.9+, Swift 6.4 and a macOS 14 or newer SDK. Apple Command Line Tools provide the compiler and SDK; install them with `xcode-select --install` if needed. WebKit checks require an unlocked graphical session and briefly open test windows. Node.js enables the additional JavaScript syntax checks; commit checks and CI require Gitleaks 8.30.1.
+
+```sh
+git clone https://github.com/3mukon/language-noob.git
+cd language-noob
 sh scripts/check.sh
 ```
 
-The checks require Git, Bash, Python 3.9+, Swift 6.4 and the macOS 14 SDK. Commit checks and CI also require Gitleaks 8.30.1. The application check compiles the Swift modules, runs shared-session and native-controller tests, validates bundled JavaScript, checks the interface in real WebKit, and packages `dist/LanguageNoob.app` and `dist/language-noob/`. Terminal process tests exercise the packaged executable with disposable databases and a fake streaming service. WebKit verification requires access to a macOS graphical session and briefly opens a test window.
+The check builds and tests both clients, including shared learning logic, native WebKit rendering and packaged terminal processes. It produces `dist/LanguageNoob.app` and the complete `dist/language-noob/` terminal package. Tests use disposable data and a fake streaming service; no API key is needed.
 
-Start the terminal client after building:
+### Install the desktop app
+
+Open `dist` in Finder and **move** `LanguageNoob.app` into `/Applications`. For an update, quit the installed application first and replace its existing bundle. Launch the installed copy from Applications. Keeping and launching another `.app` in the build directory can create a second entry in the macOS application list.
+
+### Install the terminal command
+
+For a first installation, run these commands from the cloned repository:
 
 ```sh
-./dist/language-noob/bin/language-noob learn --lang en
-./dist/language-noob/bin/language-noob study --lang ja
-./dist/language-noob/bin/language-noob search music --lang en
-./dist/language-noob/bin/language-noob stats --lang en --json
-./dist/language-noob/bin/language-noob --help
+mkdir -p "$HOME/.local/share" "$HOME/.local/bin"
+mv dist/language-noob "$HOME/.local/share/"
+ln -s "$HOME/.local/share/language-noob/bin/language-noob" "$HOME/.local/bin/language-noob"
 ```
 
-Copy `dist/LanguageNoob.app` to `/Applications` to install the desktop application. Move the entire `dist/language-noob` directory when installing the terminal client; `bin`, `lib`, `Resources` and `LICENSE` travel together. Both clients default to `~/Library/Application Support/Language Noob`. Pass `--data-directory <directory>` for isolated data. New commands read the latest saved data; already-open rounds retain their own state. Terminal usage is documented in the [CLI module](Sources/LanguageNoobCLI/README.md).
+Move the entire package: `bin`, `lib`, `Resources` and `LICENSE` must stay together. For an update, exit running terminal rounds and move the previous `~/.local/share/language-noob` directory aside as a backup before moving in the new package. Keep the existing command symlink when it already points to the installation location.
+
+If `~/.local/bin` is not already on PATH, add the following line once to `~/.zshrc`, then open a new terminal. Running the line directly also enables the command in the current shell:
+
+```sh
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Verify with `language-noob --help`. The command also works by its full path, `~/.local/bin/language-noob`, without changing PATH.
+
+### Everyday terminal commands
+
+```sh
+language-noob study --lang en       # New English words and due reviews
+language-noob study --lang ja       # New Japanese words and due reviews
+language-noob learn                 # Only new words, using the saved language
+language-noob review                # Only due reviews, using the saved language
+language-noob search music --lang en
+language-noob stats --lang en --json
+language-noob config show --effective
+language-noob --help
+```
+
+Inside a round, enter `help` for available actions, `next` or `prev` to navigate, `reveal` to see an answer, and `quit` to exit. Reading and navigation never record a grade. `--lang en` and `--lang ja` apply to that command only; `language-noob config set language ja` changes the saved language. See the [CLI module](Sources/LanguageNoobCLI/README.md) for grading, questions, cancellation and configuration details.
+
+### Data and updates
+
+Both clients share `~/Library/Application Support/Language Noob`: vocabulary, saved enrichment, progress and ordinary AI settings. Replacing the program packages preserves that directory. API keys remain in macOS Keychain. Pass `--data-directory <directory>` for isolated data. New commands read the latest saved data; already-open rounds retain their own temporary state and conversations.
+
+## Study flow
+
+New words first appear as reading cards, followed by recall cards. Due reviews use assessment cards directly. Try to recall the answer, reveal it, then choose a grade; only that explicit assessment saves progress. The next round samples new words randomly, with English and Japanese kept separate. Ending a round retains completed grades and clears its temporary conversations.
 
 Navigation preserves unfinished work. Library searches open a separate stack of matching entries; returning to study restores its position and temporary notes. Switching languages within the library retains the search panel, query and input focus, and refreshes only the selected language. Drag the library header to move the window. Adding a word reuses unfinished assessments when possible. Reading and browsing never save a grade; explicit grades are saved before the interface advances. Existing version-1 learning databases remain compatible.
+
+AI is optional. Choose the application's AI settings or terminal `config` commands to use an authenticated local Codex/Claude Code installation or an API endpoint. Both local and API connections stream replies. Automatic mode discovers local services and inherits their model settings; choosing an explicit connection enables overrides. Without a usable service, offline vocabulary and study remain available. API keys are entered through the native settings dialog or the terminal's hidden `config key set` prompt.
 
 ## Bundled dictionaries
 
