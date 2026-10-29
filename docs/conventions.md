@@ -64,14 +64,14 @@ type is one of feat, fix, refactor, docs, test, chore. Technical reasons only; `
 | Agent policy | Before supported tools | Hook bypass, secret paths and protected patch targets | Run `scripts/agent-policy.py` with a hook JSON fixture |
 | Application build/tests | Before done; CI | Swift compilation, round transitions, storage rollback, assistant lifetimes, native coordination and WebKit interaction | `sh scripts/check-app.sh` |
 
-Foundation dependencies: Bash, Git and Python 3.9+. Scanner: Gitleaks 8.30.1, pinned in CI. CI includes the foundation checks and macOS application verification; remote execution has not yet been verified. The scanner's own checks cannot be skipped; missing/broken scanners block commits and pushes. The short local check does not scan developer secrets or real user data.
+Foundation dependencies: Bash, Git and Python 3.9+. Scanner: Gitleaks 8.30.1, pinned in CI. GitHub Actions is configured to run the foundation checks and application verification on macOS 26; the application still targets macOS 14 or later. The scanner's own checks cannot be skipped; missing/broken scanners block commits and pushes. The short local check does not scan developer secrets or real user data.
 
 ## Agent tools
 
 - Codex reads `AGENTS.md`; `.codex/hooks.json` uses current [official hooks](https://learn.chatgpt.com/docs/hooks). Review and trust it via `/hooks` in a new session. Protected `apply_patch` targets are refused: Codex does not support an approval-producing PreToolUse result. Maintainer edits are required for later protected changes. A command failure is mapped to exit 2; runtime timeout behavior remains an unverified gap. Shell mutation matching is an accident guard, not a sandbox.
 - Claude Code imports `AGENTS.md` via `CLAUDE.md`; `.claude/settings.json` asks for protected file edits and denies secret reads. Its hook uses `onFailure: block` (requires 2.1.295+). Syntax follows the [official hooks reference](https://code.claude.com/docs/en/hooks) and [permissions reference](https://code.claude.com/docs/en/permissions). No local Claude executable was available at setup, so runtime prompts are unverified.
 - Both tools retain their existing global permissions. Hosted tools and specialized tool paths may bypass local hook coverage; other agents have only the written rules and Git checks until integrated.
-- Require CI and secret push protection when the remote is created. CODEOWNERS identifies the maintainer; mandatory owner approval waits until at least two people can approve.
+- The default branch requires the GitHub Actions foundation check against the current base, and blocks deletion and force pushes. Secret scanning and push protection are enabled. CODEOWNERS identifies the maintainer; mandatory owner approval waits until at least two people can approve.
 
 ## Exemplars
 
